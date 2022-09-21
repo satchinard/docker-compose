@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  stff:
+    container_name: stff
+    hostname: stff
+    image: 158.69.28.110:5000/stff/backend
+    ports:
+      - "9023:9023"
+      - "9055:9055"
+      - "9066:9066"
+      - "9077:9077"
+      - "9099:9099"
+    volumes:
+      - backend_volume:/home/ubuntu/stff-files
+    networks:
+      - my-srv-net 
+      - mysql-net
+    env_file:
+      - server.env
+
+networks:
+  my-srv-net:
+  mysql-net:
+volumes:
+  backend_volume:

@@ -1,0 +1,87 @@
+version: "3.3"
+
+volumes:
+  mysql_volume:
+  backend_volume:
+  
+networks:
+  stff-network:
+
+services:
+
+# la base de données
+  mysql-server:
+    container_name: mysql-server
+    hostname: mysql-server
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'stff'
+      MYSQL_USER: 'stff'
+      MYSQL_PASSWORD: 'Root2021'
+      MYSQL_ROOT_PASSWORD: 'Root2021'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mysql_volume:/var/lib/mysql
+    networks:
+      - stff-network
+
+# les micros services (discovery, gateway et config)
+  servers:
+    container_name: servers
+    hostname: stff-servers
+    image: stff/servers
+    restart: always
+    depends_on:
+      mysql-server:
+        condition: service_completed_successfully
+    ports:
+      - "8761:8761"
+      - "8888:8888"
+      - "9999:9999"
+    env_file:
+      - server.env
+    volumes: 
+      - /home/ubuntu/stff-config/:/stff-config/
+    networks:
+      - stff-network
+
+# le backend de stff (promoteur, contrat, activite, securite, utilisateur)
+  stff:
+    container_name: stff
+    hostname: stff-backend
+    image: stff/backend
+    restart: always
+    depends_on:
+      mysql-server:
+        condition: service_completed_successfully
+      servers:
+        condition: service_completed_successfully
+    ports:
+      - "9023:9023"
+      - "9055:9055"
+      - "9066:9066"
+      - "9077:9077"
+      - "9099:9099"
+    volumes:
+      - backend_volume:/home/ubuntu/stff-files
+    networks:
+      - stff-network
+    env_file:
+      - server.env
+
+# le frontend de stff (angular)
+    stff-ng:
+      container_name: stff-ng
+      hostname: stff-ng
+      image: stff-ng
+      restart: always
+      ports:
+       - "81:80"
+      networks:
+        - stff-network
+
+

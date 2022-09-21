@@ -1,0 +1,22 @@
+version: "3.3"
+
+services:
+  servers:
+    container_name: servers
+    hostname: servers
+    image: 158.69.28.110:5000/stff/servers
+    restart: always
+    ports:
+      - "8761:8761"
+      - "8888:8888"
+      - "9999:9999"
+    env_file:
+      - server.env
+    volumes: 
+      - /home/ubuntu/stff-config/:/stff-config/
+    networks:
+      - my-srv-net
+
+networks:
+  my-srv-net:
+                                                                                                                                                        

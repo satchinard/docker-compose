@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+    sql-server:
+        container_name: sql1
+        hostname: sql1
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        # docker run -e ACCEPT_EULA=Y -e MSSQL_PID='Developer' -e MSSQL_SA_PASSWORD='<YourStrong!Passw0rd>' -e MSSQL_TCP_PORT=1234 -p 1234:1234 -d mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+        restart: always
+        environment:
+          ACCEPT_EULA: 'Y'
+          SA_PASSWORD: 'Root2022'
+          TZ: Africa/Lome
+          # SELECT * FROM sys.fn_helpcollations() where name like '%french%'; 
+          #MSSQL_COLLATION: French_100_CI_AI_SC_UTF8
+          MSSQL_COLLATION: French_CI_AS
+          MSSQL_LCID: 1036
+          # MSSQL_DATA_DIR: 
+        ports:
+          - '1433:1433'
+        expose:
+          - '1433'
+        volumes:
+          - '/home/ada/ftp/mssql:/var/mssql'
+        networks:
+          - sql1-net
+
+networks:
+  sql1-net:
+        name: sql1-network

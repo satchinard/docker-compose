@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+    postgres-server:
+        container_name: postgres1
+        hostname: postgres1
+        image: postgres
+        restart: always
+        environment:
+          POSTGRES_USER: 'admin'
+          POSTGRES_PASSWORD: 'Root2022'
+        ports:
+          - '5432:5432'
+        expose:
+          - '5432'
+        volumes:
+          - '/home/ada/ftp/pgsql:/var/pgsql'
+        networks:
+          - pgsql1-net
+
+    # postgres-admin:
+      # container_name: pgadmin1
+      # hostname: pgadmin1
+      # image: dpage/pgadmin4:latest
+      # environnement:
+        # - PGADMIN_DEFAULT_EMAIL: ada.atchinard@cagecfi.com
+        # - PGADMIN_DEFAULT_PASSWORD: 'Root2022'
+      # ports: 
+        # - '8082:80'
+      # expose:
+        # - '8082'
+      # networks:
+        # - pgsql1-net
+
+networks:
+  pgsql1-net:
+        name: pgsql1-network

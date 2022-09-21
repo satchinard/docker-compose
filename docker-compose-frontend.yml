@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+    stff-ng:
+      container_name: stff-ng
+      hostname: stff-ng
+      image: perfectvision.cagecfi.com:5000/stff-ng
+      ports:
+       - "80:80"
+      env_file:
+        - server.env
+      networks:
+        - my-srv-net 
+
+networks:
+  my-srv-net:
+

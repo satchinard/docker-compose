@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  mysql-server:
+    container_name: mysql-server
+    hostname: mysql-server
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'stff'
+      MYSQL_USER: 'stff'
+      MYSQL_PASSWORD: 'Root2021'
+      MYSQL_ROOT_PASSWORD: 'Root2021'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mysql_volume:/var/lib/mysql
+    networks:
+      - mysql-net
+volumes:
+  mysql_volume:
+networks:
+  mysql-net:
+
